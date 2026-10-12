@@ -1,0 +1,15 @@
+RegisterNUICallback('close', function(_, cb)
+    SetNuiFocus(false, false)
+    cb('ok')
+end)
+
+RegisterNUICallback('action', function(data, cb)
+    TriggerServerEvent('punish:action', data.action, data.payload or {})
+    cb('ok')
+end)
+
+RegisterNUICallback('fetch', function(data, cb)
+    ESX.TriggerServerCallback('punish:fetch', function(result)
+        cb(result or {})
+    end, data.kind)
+end)

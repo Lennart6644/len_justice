@@ -1,0 +1,27 @@
+CREATE TABLE IF NOT EXISTS `jail` (
+    `identifier` VARCHAR(60) NOT NULL,
+    `jailtime` INT(11) NOT NULL DEFAULT 0,
+    `reason` VARCHAR(255) NULL DEFAULT NULL,
+    `judge` VARCHAR(100) NULL DEFAULT NULL,
+    `dateandtime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`identifier`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `social_hours` (
+    `identifier` VARCHAR(60) NOT NULL,
+    `social_hours_amount` INT(11) NOT NULL DEFAULT 0,
+    `reason` VARCHAR(255) NULL DEFAULT NULL,
+    `judge` VARCHAR(100) NULL DEFAULT NULL,
+    `dateandtime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`identifier`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `admin_jail` (
+    `license` VARCHAR(60) NOT NULL,
+    `player_name` VARCHAR(100) NULL DEFAULT NULL,
+    `time` INT(11) NOT NULL DEFAULT 0,
+    `reason` VARCHAR(255) NULL DEFAULT NULL,
+    `admin_name` VARCHAR(100) NULL DEFAULT NULL,
+    `dateandtime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`license`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

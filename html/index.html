@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Punish</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<svg class="sprite" aria-hidden="true" focusable="false">
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+<symbol id="i-gavel" viewBox="0 0 24 24"><path d="M14 4l6 6-3 3-6-6z"/><path d="M4 20l7-7"/><path d="M3 21h6"/></symbol>
+<symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></symbol>
+<symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M14 9l2 2"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21c0-3.5 3-6 7-6s7 2.5 7 6"/><path d="M16 4.5a4 4 0 0 1 0 7M22 21c0-2.8-1.8-4.8-4.5-5.6"/></symbol>
+<symbol id="i-broom" viewBox="0 0 24 24"><path d="M19 3l-7 7"/><path d="M12 10l2 2-6 6H4v-4z"/><path d="M6 16l3 3"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></symbol>
+<symbol id="i-power" viewBox="0 0 24 24"><path d="M12 3v8"/><path d="M6.3 6.3a8 8 0 1 0 11.4 0"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17.2v.3"/></symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></symbol>
+</svg>
+
+<main id="app" class="app hidden">
+    <section id="panel" class="panel">
+        <aside class="sidebar">
+            <div class="brand">
+                <svg class="icon"><use href="#i-shield"/></svg>
+                <span data-i18n="ui.brand"></span>
+            </div>
+            <nav id="nav" class="nav"></nav>
+            <button id="close-btn" class="btn ghost">
+                <svg class="icon"><use href="#i-power"/></svg>
+                <span data-i18n="ui.close"></span>
+            </button>
+        </aside>
+
+        <div class="content">
+            <header class="header">
+                <h1 id="title"></h1>
+                <div class="badge">
+                    <span class="pulse"></span>
+                    <span id="badge"></span>
+                </div>
+            </header>
+
+            <nav id="subnav" class="subnav hidden"></nav>
+
+            <div class="stage">
+                <section class="view" id="view-jail-create">
+                    <div class="card">
+                        <div class="card-head">
+                            <svg class="icon"><use href="#i-gavel"/></svg>
+                            <h2 data-i18n="ui.tab_jail_create"></h2>
+                        </div>
+                        <label class="field">
+                            <span data-i18n="ui.field_name"></span>
+                            <input type="text" data-field="name" data-i18n-placeholder="ui.field_name_ph" maxlength="60" autocomplete="off">
+                        </label>
+                        <div class="row">
+                            <label class="field">
+                                <span><span data-i18n="ui.field_units"></span> <em class="limit" data-limit-label="jail"></em></span>
+                                <input type="number" data-field="units" data-limit="jail" min="1" step="1">
+                            </label>
+                            <label class="field">
+                                <span data-i18n="ui.field_reason"></span>
+                                <input type="text" data-field="reason" data-i18n-placeholder="ui.field_reason_ph" maxlength="55" autocomplete="off">
+                            </label>
+                        </div>
+                        <button class="btn primary wide" data-action="jail_create">
+                            <span data-i18n="ui.btn_sentence"></span>
+                        </button>
+                    </div>
+                </section>
+
+                <section class="view" id="view-jail-pending">
+                    <div class="card wide">
+                        <div class="card-head">
+                            <svg class="icon"><use href="#i-list"/></svg>
+                            <h2 data-i18n="ui.tab_jail_pending"></h2>
+                            <button class="icon-btn" data-refresh="pending">
+                                <svg class="icon"><use href="#i-refresh"/></svg>
+                            </button>
+                        </div>
+                        <div id="pending-items" class="list"></div>
+                    </div>
+                </section>
+
+                <section class="view" id="view-jail-release">
+                    <div class="card">
+                        <div class="card-head">
+                            <svg class="icon"><use href="#i-key"/></svg>
+                            <h2 data-i18n="ui.tab_jail_release"></h2>
+                        </div>
+                        <label class="field">
+                            <span data-i18n="ui.field_name"></span>
+                            <input type="text" data-field="name" data-i18n-placeholder="ui.field_name_ph" maxlength="60" autocomplete="off">
+                        </label>
+                        <button class="btn danger wide" data-action="jail_release">
+                            <span data-i18n="ui.btn_release"></span>
+                        </button>
+                    </div>
+                </section>
+
+                <section class="view" id="view-list-jailed">
+                    <div class="card wide">
+                        <div class="card-head">
+                            <svg class="icon"><use href="#i-users"/></svg>
+                            <h2 data-i18n="ui.nav_jailed"></h2>
+                            <button class="icon-btn" data-refresh="jailed">
+                                <svg class="icon"><use href="#i-refresh"/></svg>
+                            </button>
+                        </div>
+                        <div id="jailed-items" class="list"></div>
+                    </div>
+                </section>
+
+                <section class="view" id="view-comserv-assign">
+                    <div class="card">
+                        <div class="card-head">
+                            <svg class="icon"><use href="#i-broom"/></svg>
+                            <h2 data-i18n="ui.tab_comserv_assign"></h2>
+                        </div>
+                        <label class="field">
+                            <span data-i18n="ui.field_name"></span>
+                            <input type="text" data-field="name" data-i18n-placeholder="ui.field_name_ph" maxlength="60" autocomplete="off">
+                        </label>
+                        <div class="row">
+                            <label class="field">
+                                <span><span data-i18n="ui.field_hours"></span> <em class="limit" data-limit-label="comserv"></em></span>
+                                <input type="number" data-field="hours" data-limit="comserv" min="1" step="1">
+                            </label>
+                            <label class="field">
+                                <span data-i18n="ui.field_reason"></span>
+                                <input type="text" data-field="reason" data-i18n-placeholder="ui.field_reason_ph" maxlength="55" autocomplete="off">
+                            </label>
+                        </div>
+                        <button class="btn primary wide" data-action="comserv_assign">
+                            <span data-i18n="ui.btn_assign"></span>
+                        </button>
+                    </div>
+                </section>
+
+                <section class="view" id="view-comserv-revoke">
+                    <div class="card">
+                        <div class="card-head">
+                            <svg class="icon"><use href="#i-check"/></svg>
+                            <h2 data-i18n="ui.tab_comserv_revoke"></h2>
+                        </div>
+                        <label class="field">
+                            <span data-i18n="ui.field_name"></span>
+                            <input type="text" data-field="name" data-i18n-placeholder="ui.field_name_ph" maxlength="60" autocomplete="off">
+                        </label>
+                        <button class="btn danger wide" data-action="comserv_revoke">
+                            <span data-i18n="ui.btn_revoke"></span>
+                        </button>
+                    </div>
+                </section>
+
+                <section class="view" id="view-list-comserv">
+                    <div class="card wide">
+                        <div class="card-head">
+                            <svg class="icon"><use href="#i-users"/></svg>
+                            <h2 data-i18n="ui.nav_comserv_list"></h2>
+                            <button class="icon-btn" data-refresh="comserv">
+                                <svg class="icon"><use href="#i-refresh"/></svg>
+                            </button>
+                        </div>
+                        <div id="comserv-items" class="list"></div>
+                    </div>
+                </section>
+
+                <section class="view" id="view-admin-assign">
+                    <div class="card">
+                        <div class="card-head">
+                            <svg class="icon"><use href="#i-alert"/></svg>
+                            <h2 data-i18n="ui.tab_admin_assign"></h2>
+                        </div>
+                        <p class="hint" data-i18n="ui.admin_hint"></p>
+                        <label class="field">
+                            <span data-i18n="ui.field_player_id"></span>
+                            <input type="number" data-field="id" data-i18n-placeholder="ui.field_player_id_ph" min="1" step="1">
+                        </label>
+                        <div class="row">
+                            <label class="field">
+                                <span data-i18n="ui.field_minutes"></span>
+                                <input type="number" data-field="minutes" data-max="10080" min="1" step="1">
+                            </label>
+                            <label class="field">
+                                <span data-i18n="ui.field_reason"></span>
+                                <input type="text" data-field="reason" data-i18n-placeholder="ui.field_reason_ph" maxlength="55" autocomplete="off">
+                            </label>
+                        </div>
+                        <button class="btn primary wide" data-action="admin_punish">
+                            <span data-i18n="ui.btn_admin_assign"></span>
+                        </button>
+                    </div>
+                </section>
+
+                <section class="view" id="view-admin-revoke">
+                    <div class="card">
+                        <div class="card-head">
+                            <svg class="icon"><use href="#i-check"/></svg>
+                            <h2 data-i18n="ui.tab_admin_revoke"></h2>
+                        </div>
+                        <label class="field">
+                            <span data-i18n="ui.field_player_id"></span>
+                            <input type="number" data-field="id" data-i18n-placeholder="ui.field_player_id_ph" min="1" step="1">
+                        </label>
+                        <button class="btn danger wide" data-action="admin_release">
+                            <span data-i18n="ui.btn_admin_revoke"></span>
+                        </button>
+                    </div>
+                </section>
+
+                <section class="view" id="view-admin-list">
+                    <div class="card wide">
+                        <div class="card-head">
+                            <svg class="icon"><use href="#i-list"/></svg>
+                            <h2 data-i18n="ui.tab_admin_list"></h2>
+                            <button class="icon-btn" data-refresh="adminjailed">
+                                <svg class="icon"><use href="#i-refresh"/></svg>
+                            </button>
+                        </div>
+                        <div id="admin-items" class="list"></div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </section>
+</main>
+
+<main id="details-app" class="app hidden">
+    <section class="panel details-panel theme-jail">
+        <div class="details-hero">
+            <div class="details-seal">
+                <svg class="icon"><use href="#i-lock"/></svg>
+            </div>
+            <div>
+                <p class="details-kicker" data-i18n="ui.brand"></p>
+                <h1 data-i18n="jail.details_title"></h1>
+            </div>
+        </div>
+        <div class="details-grid">
+            <div class="detail-card">
+                <span class="detail-label" data-i18n="ui.details_remaining"></span>
+                <strong class="detail-value detail-big"><span id="details-units">0</span> <small data-i18n="hud.unit_units"></small></strong>
+            </div>
+            <div class="detail-card">
+                <span class="detail-label" data-i18n="ui.details_date"></span>
+                <strong class="detail-value" id="details-date">-</strong>
+            </div>
+            <div class="detail-card wide-detail">
+                <span class="detail-label" data-i18n="ui.details_reason"></span>
+                <strong class="detail-value" id="details-reason">-</strong>
+            </div>
+            <div class="detail-card wide-detail">
+                <span class="detail-label" data-i18n="ui.details_judge"></span>
+                <strong class="detail-value" id="details-judge">-</strong>
+            </div>
+        </div>
+        <button id="details-close" class="btn ghost details-close">
+            <svg class="icon"><use href="#i-power"/></svg>
+            <span data-i18n="ui.close"></span>
+        </button>
+    </section>
+</main>
+
+<div id="hud" class="hud hidden">
+    <div class="hud-card">
+        <div class="hud-top">
+            <div class="hud-icon">
+                <svg class="icon"><use id="hud-icon" href="#i-lock"/></svg>
+            </div>
+            <div>
+                <span id="hud-title" class="hud-label"></span>
+                <div class="hud-value">
+                    <span id="hud-value">0</span>
+                    <small id="hud-unit"></small>
+                </div>
+            </div>
+        </div>
+        <div class="hud-bar"><div id="hud-fill" class="hud-fill"></div></div>
+        <div id="hud-afk" class="hud-afk"></div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
